@@ -1,0 +1,23 @@
+#include "project.h"
+
+#define PERIOD_COUNT_MS 2000    // 2 seconds in milliseconds
+#define DUTY_COUNT_MS   1000    // 50% of 2 seconds in milliseconds
+
+int main(void)
+{
+    CyGlobalIntEnable; /* Enable global interrupts. */
+
+    Pin_PWM_SetDriveMode(Pin_PWM_DM_STRONG);
+    Pin_PWM_Write(0);
+
+    for(;;)
+    {
+        // Turn the pin ON for DUTY_COUNT_MS milliseconds (50% of period)
+        Pin_PWM_Write(1);
+        CyDelay(DUTY_COUNT_MS);
+
+        // Turn the pin OFF for the rest of the period
+        Pin_PWM_Write(0);
+        CyDelay(PERIOD_COUNT_MS - DUTY_COUNT_MS);
+    }
+}

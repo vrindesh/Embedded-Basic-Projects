@@ -1,0 +1,55 @@
+
+/*
+#include <project.h>
+
+int main(void)
+{
+    CyGlobalIntEnable; // Enable global interrupts.     
+    for(;;)
+    {
+        // Read switch state
+        uint8_t switchState = switch_pin_Read();
+        
+        if (switchState == 0) // Assuming active low switch
+        {
+            led_Write(1); // Turn LED on
+        }
+        else
+        {
+            led_Write(0); // Turn LED off
+        }
+        
+        CyDelay(500); // Delay for demonstration
+    }
+}
+
+*/
+
+#include <project.h>
+
+int main(void)
+{
+    CyGlobalIntEnable; /* Enable global interrupts. */
+    
+    uint8_t ledState = 0; // Initial LED state: off
+    uint8_t previousSwitchState = 1; // Initial switch state: open
+    
+    for(;;)
+    {
+        // Read switch state
+        uint8_t switchState = switch_pin_Read();
+        
+        // Check if switch was just pressed (transition from high to low)
+        if (switchState == 0 && previousSwitchState == 1)
+        {
+            // Toggle LED state
+            ledState = !ledState;
+            led_Write(ledState);
+        }
+        
+        previousSwitchState = switchState; // Update previous switch state
+        
+        CyDelay(50); // Short delay to improve responsiveness
+    }
+}
+
